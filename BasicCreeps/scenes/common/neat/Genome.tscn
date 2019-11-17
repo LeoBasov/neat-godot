@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/common/neat/Genome.gd" type="Script" id=1]
+
+[node name="Genome" type="Node"]
+script = ExtResource( 1 )
+nr_hidden_nodes = 2

@@ -1,0 +1,40 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://scenes/creep/Creep.gd" type="Script" id=1]
+[ext_resource path="res://assets/sprites/Creature_frame.png" type="Texture" id=2]
+[ext_resource path="res://assets/sprites/Creature_fill.png" type="Texture" id=3]
+[ext_resource path="res://scenes/common/FiniteStateMachine.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/common/neat/Genome.tscn" type="PackedScene" id=5]
+
+[sub_resource type="PhysicsMaterial" id=1]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 19.4722
+height = 6.82386
+
+[node name="Creep" type="RigidBody2D" groups=[
+"Creep",
+]]
+pause_mode = 1
+physics_material_override = SubResource( 1 )
+gravity_scale = 0.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Frame" type="Sprite" parent="."]
+scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 2 )
+
+[node name="Fill" type="Sprite" parent="."]
+scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource( 2 )
+
+[node name="Brain" parent="." instance=ExtResource( 4 )]
+
+[node name="Genome" parent="." instance=ExtResource( 5 )]
