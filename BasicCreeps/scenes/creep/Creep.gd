@@ -9,8 +9,13 @@ const SENSE_RADIUS : float = 500.0
 var size_screen : Vector2
 var found_food = null
 
+var input_vals : Dictionary
+var output_vals : Dictionary
+var food_vector = null
+
 func _on_Food_eaten():
 	found_food = null
+	food_vector = null
 	$Brain.pop_state()
 	$Brain.push_state(funcref(self, "state_forage"))
 
@@ -49,6 +54,18 @@ func _ready():
 	size_screen = get_viewport().size
 	$Brain.push_state(funcref(self, "state_forage"))
 	
+	input_vals[1] = position.x
+	input_vals[2] = position.y
+	input_vals[3] = linear_velocity.x
+	input_vals[4] = linear_velocity.y
+	input_vals[5] = angular_velocity
+	input_vals[6] = 0.0
+	input_vals[7] = 0.0
+	
+	output_vals[8] = 0.0
+	output_vals[9] = 0.0
+	output_vals[10] = 0.0
+	
 func rotate_right():
 	add_torque(TORQUE)
 	
@@ -64,9 +81,28 @@ func pull():
 	add_central_force(-force)
 	
 func _process(delta):
-	$Brain.update(delta)
-
+	#$Brain.update(delta)
+	
+	input_vals[1] = position.x
+	input_vals[2] = position.y
+	input_vals[3] = linear_velocity.x
+	input_vals[4] = linear_velocity.y
+	input_vals[5] = angular_velocity
+	input_vals[6] = 0.0
+	input_vals[7] = 0.0
+	
+	if found_food:
+		food_vector = found_food.position - position
+		input_vals[6] = food_vector.x
+		input_vals[7] = food_vector.y
+	
+	output_vals = $Genome.execute(input_vals)
+	
 func _physics_process(delta):
+	applied_force.x = 100.0*(output_vals[8] - 0.5)
+	applied_force.y = 100.0*(output_vals[9] - 0.5)
+	applied_torque = 1000.0*(output_vals[10] - 0.5)
+	
 	if linear_velocity.length() >= MAX_LIN_VELOCITY:
 		applied_force = Vector2(0.0, 0.0)
 	if angular_velocity >= MAX_ANGULAR_VELOCITY:

@@ -38,3 +38,6 @@ shape = SubResource( 2 )
 [node name="Brain" parent="." instance=ExtResource( 4 )]
 
 [node name="Genome" parent="." instance=ExtResource( 5 )]
+nr_sensors_nodes = 7
+nr_hidden_nodes = 0
+nr_output_nodes = 3

@@ -24,8 +24,11 @@ func _init():
 func _ready():
 	set_up(self.nr_sensors_nodes, self.nr_hidden_nodes, self.nr_output_nodes)
 	
-	print(get_str())
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
 	
+	for gene in genes:
+		gene.weight = rng.randf_range(-10.0, 10.0)
 
 func add_neat_node(type : int) -> int:
 	var id : int = self.nodes.size()
@@ -144,7 +147,7 @@ func execute(input_id_vals : Dictionary) -> Dictionary:
 func execute_node(id : int, input_id_vals : Dictionary) -> float:
 	var ret_val : float
 	
-	for gene_id in self.nodes[id].gene_id:
+	for gene_id in self.nodes[id].gene_ids:
 		var gene = self.genes[gene_id]
 		var next_id : int = gene.input_node_id
 		var node = self.nodes[next_id]
