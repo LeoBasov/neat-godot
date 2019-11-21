@@ -1,9 +1,33 @@
 extends Node
 
 var Food  = load("res://scenes/Food/Food.tscn")
+var Creep = load("res://scenes/creep/Creep.tscn")
+
+export var numb_creeps = 10
+
+func reset():
+	for food in get_tree().get_nodes_in_group("Food"):
+		food.queue_free()
+		
+	for creep in get_tree().get_nodes_in_group("Creep"):
+		creep.queue_free()
+		
+	var scree_size = get_viewport().size
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	
+	for _i in numb_creeps:
+		var positon = Vector2(rng.randf_range(0.0, scree_size.x), rng.randf_range(0.0, scree_size.y))
+		var rotation = rng.randf_range(0.0, 2*PI)
+		var creep = Creep.instance()
+		creep.position = positon
+		creep.rotation = rotation
+		add_child(creep)
+	
+	get_tree().paused = true
 
 func _ready():
-	get_tree().paused = !(get_tree().paused)
+	reset()
 	
 func _process(delta):
 	if Input.is_action_pressed("ui_right"):
@@ -14,6 +38,8 @@ func _process(delta):
 		$Creep.pull()
 	if Input.is_action_pressed("ui_up"):
 		$Creep.push()
+	if Input.is_action_pressed("ui_reset"):
+		reset()
 		
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == 1:
