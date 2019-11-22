@@ -14,7 +14,7 @@ func update(delta : float) -> void:
 func pop_state() -> FuncRef:
 	return self.state_stack.pop_back()
 	
-func push_state(state) -> void:
+func push_state(state : FuncRef) -> void:
 	if get_current_state() != state:
 		self.state_stack.push_back(state)
 	
